@@ -1,4 +1,5 @@
 package com.example.coffeeshop.ui.shop;
+
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,17 +42,12 @@ public class ShopFragment extends Fragment {
         // Configura o RecyclerView
         itemsRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
-        // Inicialize o adaptador antes de carregar os produtos
+        // Inicializa o adaptador
         productAdapter = new ProductAdapter(productList);
         itemsRecyclerView.setAdapter(productAdapter);
-
 
         // Cria a lista de produtos (essa lista deve vir do seu backend)
         loadProducts();
-
-        // Adapter para RecyclerView
-        productAdapter = new ProductAdapter(productList);
-        itemsRecyclerView.setAdapter(productAdapter);
 
         // Configura as abas de categorias
         tabLayout.addTab(tabLayout.newTab().setText("Cafés"));
@@ -86,6 +82,7 @@ public class ShopFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    Log.d("ShopFragment", "Resposta da API: " + response.body().toString()); // Adicionado log
                     productList.clear();
                     productList.addAll(response.body());
                     productAdapter.notifyDataSetChanged(); // Atualizar RecyclerView
@@ -95,10 +92,13 @@ public class ShopFragment extends Fragment {
                 }
             }
 
+
+
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 // Lidar com falhas na requisição
                 Log.e("ShopFragment", "Falha na API: " + t.getMessage());
             }
         });
-}}
+    }
+}
