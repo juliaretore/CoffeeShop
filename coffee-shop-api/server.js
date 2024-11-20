@@ -4,10 +4,10 @@ const port = 8000;  // Porta local do servidor
 
 // Dados fictícios para exemplificar a resposta da API
 const produtos = [
-    { id: 1, name: 'Café Espresso', category: 0, price: 15 },
-    { id: 2, name: 'Café Latte', category: 0, price: 18 },
-    { id: 3, name: 'Coxinha', category: 1, price: 5 },
-    { id: 4, name: 'Bolo de Chocolate', category: 2, price: 8 }
+    { id: 1, name: 'Café Espresso', description:'a', price: 15, image: 'https://guiadacozinha.com.br/wp-content/uploads/2021/06/Bolo-vulcao-de-cenoura-com-brigadeiro.jpg', category: 0 },
+    { id: 2, name: 'Café Latte',  description: 'b', price: 18,image: 'https://guiadacozinha.com.br/wp-content/uploads/2021/06/Bolo-vulcao-de-cenoura-com-brigadeiro.jpg', category: 0},
+    { id: 3, name: 'Coxinha', description: 'c', price: 5, image: 'https://guiadacozinha.com.br/wp-content/uploads/2021/06/Bolo-vulcao-de-cenoura-com-brigadeiro.jpg', category: 1},
+    { id: 4, name: 'Bolo de Chocolate', description:'d', price: 8, image: 'https://guiadacozinha.com.br/wp-content/uploads/2021/06/Bolo-vulcao-de-cenoura-com-brigadeiro.jpg', category: 2}
 ];
 
 // Rota da API
