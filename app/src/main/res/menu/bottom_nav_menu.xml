@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Opção Shop -->
+    <item
+        android:id="@+id/navigation_shop"
+        android:icon="@drawable/ic_shop"
+        android:title="Shop" />
+
+    <!-- Opção Cart -->
+    <item
+        android:id="@+id/navigation_cart"
+        android:icon="@drawable/ic_cart"
+        android:title="Cart" />
+
+    <!-- Opção Orders -->
+    <item
+        android:id="@+id/navigation_order"
+        android:icon="@drawable/ic_order"
+        android:title="Orders" />
+</menu>
