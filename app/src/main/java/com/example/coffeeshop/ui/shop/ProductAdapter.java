@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.coffeeshop.R;
 import com.example.coffeeshop.model.Product;
 
@@ -31,11 +32,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(ProductViewHolder holder, int position) {
         Product product = productList.get(position);
-//        holder.image.setImageResource(product.getImageResId());
+
+        // Configurar dados dinâmicos nos campos do layout
         holder.title.setText(product.getName());
         holder.description.setText(product.getDescription());
-        holder.price.setText(String.format("$%.2f", product.getPrice()));
+        holder.price.setText(String.format("R$ %.2f", product.getPrice()));
+
+        // Carregar imagem da URL com Glide
+        Glide.with(holder.itemView.getContext())
+                .load(product.getImage()) // URL da imagem
+                .into(holder.image); // Aplica a imagem no ImageView
     }
+
 
     @Override
     public int getItemCount() {
