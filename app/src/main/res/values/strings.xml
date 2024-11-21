@@ -3,4 +3,25 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="prompt_username">Digite seu nome de usuário</string>
+    <string name="prompt_email">Digite seu email</string>
+    <string name="prompt_password">Digite sua senha</string>
+    <string name="prompt_address">Digite seu endereço</string>
+    <string name="prompt_phone">Digite seu telefone</string>
+    <string name="action_register">Registrar</string>
+    <string name="register_success">Cadastro realizado com sucesso!</string>
+    <string name="register_error">Erro ao realizar cadastro</string>
+    <string name="register_connection_error">Erro de conexão</string>
+    <string name="username_label">Nome de Usuário</string>
+    <string name="password_label">Senha</string>
+    <string name="register_prompt">Ainda não possui cadastro? Cadastre-se</string>
+    <string name="title_activity_register">Registrar</string>
+
 </resources>
