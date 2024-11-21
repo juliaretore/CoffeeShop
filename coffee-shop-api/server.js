@@ -61,17 +61,25 @@ const User = mongoose.model('User', userSchema);
 
 // registrar
 app.post('/api/register', async (req, res) => {
-    console.log('Requisição recebida no /api/register:', req.body); // Adicionar log
     try {
         const { username, email, password, address, phone } = req.body;
         const newUser = new User({ username, email, password, address, phone });
         await newUser.save();
-        res.status(201).send('Usuário registrado com sucesso');
+
+        // Resposta de sucesso
+        res.status(201).send({
+            success: true,
+            message: 'Usuário registrado com sucesso'
+        });
     } catch (error) {
-        console.error('Erro ao registrar usuário:', error.message); // Log de erro
-        res.status(400).send(error.message);
+        console.error('Erro ao registrar usuário:', error.message);
+        res.status(400).send({
+            success: false,
+            message: error.message
+        });
     }
 });
+
 
 
 // login

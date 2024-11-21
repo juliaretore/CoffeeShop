@@ -99,6 +99,8 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
                 loadingProgressBar.setVisibility(View.GONE);
+                System.out.println("Erro de conexão: " + t.getMessage());
+                t.printStackTrace();
                 Toast.makeText(RegisterActivity.this, "Erro de conexão", Toast.LENGTH_SHORT).show();
             }
         });
