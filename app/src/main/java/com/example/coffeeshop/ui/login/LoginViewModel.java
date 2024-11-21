@@ -30,26 +30,26 @@ public class LoginViewModel extends ViewModel {
         return loginResult;
     }
 
-    // Método de login ajustado
     public void login(String username, String password) {
-        // Chamar o repositório para executar o login
+        // Adicionar log para depuração
+        System.out.println("LoginViewModel: Chamando login para username: " + username);
+
         loginRepository.login(username, password, new LoginDataSource.ResultCallback<LoggedInUser>() {
             @Override
             public void onSuccess(Result<LoggedInUser> result) {
-                if (result instanceof Result.Success) {
-                    LoggedInUser loggedInUser = ((Result.Success<LoggedInUser>) result).getData();
-                    // Atualizar o LiveData com sucesso
-                    loginResult.postValue(new LoginResult(new LoggedInUserView(loggedInUser.getDisplayName())));
-                }
+                LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
+                System.out.println("LoginViewModel: Login bem-sucedido para " + data.getDisplayName());
+                loginResult.postValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
             }
 
             @Override
             public void onError(Exception exception) {
-                // Atualizar o LiveData com erro
+                System.out.println("LoginViewModel: Erro no login - " + exception.getMessage());
                 loginResult.postValue(new LoginResult(R.string.login_failed));
             }
         });
     }
+
 
     public void loginDataChanged(String username, String password) {
         if (!isUserNameValid(username)) {

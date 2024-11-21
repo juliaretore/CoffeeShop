@@ -85,21 +85,38 @@ app.post('/api/register', async (req, res) => {
 // login
 app.post('/api/login', async (req, res) => {
     try {
+        console.log("Recebendo requisição de login:", req.body); // Adicionar log
         const { username, password } = req.body;
+
         const user = await User.findOne({ username });
         if (!user) {
+            console.log("Usuário não encontrado:", username); // Log de usuário não encontrado
             return res.status(404).send('Usuário não encontrado');
         }
+
         const isMatch = await bcrypt.compare(password, user.password);
         if (isMatch) {
-            res.send('Login bem-sucedido');
+            console.log("Login bem-sucedido:", username); // Log de sucesso
+            res.send({
+                success: true,
+                message: 'Login bem-sucedido',
+                user: {
+                    username: user.username,
+                    email: user.email,
+                    address: user.address,
+                    phone: user.phone
+                }
+            });
         } else {
-            res.status(401).send('Senha incorreta');
+            console.log("Senha incorreta para o usuário:", username); // Log de senha incorreta
+            res.status(401).send({ success: false, message: 'Senha incorreta' });
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        console.error("Erro no login:", error.message); // Log de erro
+        res.status(500).send({ success: false, message: error.message });
     }
 });
+
 
 // Buscar todos os usuários (sem expor senhas)
 app.get('/api/users', async (req, res) => {

@@ -55,8 +55,17 @@ public class LoginActivity extends AppCompatActivity {
         registerTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
+                String username = usernameEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString().trim();
+
+                // Adicionar logs para depuração
+                System.out.println("Tentando login com:");
+                System.out.println("Username: " + username);
+                System.out.println("Password: " + password);
+
+                loadingProgressBar.setVisibility(View.VISIBLE);
+
+                loginViewModel.login(username, password);
             }
         });
 
@@ -82,17 +91,25 @@ public class LoginActivity extends AppCompatActivity {
                 if (loginResult == null) {
                     return;
                 }
+
                 loadingProgressBar.setVisibility(View.GONE);
+
                 if (loginResult.getError() != null) {
+                    // Log de erro para depuração
+                    System.out.println("Erro no login: " + getString(loginResult.getError()));
                     showLoginFailed(loginResult.getError());
                 }
+
                 if (loginResult.getSuccess() != null) {
+                    // Log de sucesso para depuração
+                    System.out.println("Login bem-sucedido. Usuário: " + loginResult.getSuccess().getDisplayName());
                     updateUiWithUser(loginResult.getSuccess());
                 }
+
                 setResult(Activity.RESULT_OK);
 
-                //Complete and destroy login activity once successful
-                finish();
+                // Não finalize a activity antes de verificar o sucesso
+                // finish();
             }
         });
 

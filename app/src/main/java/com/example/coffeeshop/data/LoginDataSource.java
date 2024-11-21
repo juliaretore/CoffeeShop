@@ -15,7 +15,13 @@ public class LoginDataSource {
 
     public void login(String username, String password, ResultCallback<LoggedInUser> callback) {
         ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
-        User loginCredentials = new User(username, null, password, null, null); // Ignorando outros campos para login
+        User loginCredentials = new User(username, null, password, null, null);
+
+        // Log para verificar os dados enviados
+        System.out.println("LoginDataSource: Enviando dados de login");
+        System.out.println("Username: " + username);
+        System.out.println("Password: " + password);
+
         Call<UserResponse> call = apiService.loginUser(loginCredentials);
 
         call.enqueue(new Callback<UserResponse>() {
@@ -24,20 +30,27 @@ public class LoginDataSource {
                 if (response.isSuccessful() && response.body() != null) {
                     UserResponse userResponse = response.body();
                     if (userResponse.isSuccess()) {
-                        LoggedInUser user = new LoggedInUser("user-id-from-response", "user-display-name-from-response");
+                        LoggedInUser user = new LoggedInUser("user-id", userResponse.getUser().getUsername());
+                        System.out.println("LoginDataSource: Login bem-sucedido para " + user.getDisplayName());
                         callback.onSuccess(new Result.Success<>(user));
                     } else {
-                        callback.onError(new Exception("Login failed: " + userResponse.getMessage()));
+                        System.out.println("LoginDataSource: Falha no login - " + userResponse.getMessage());
+                        callback.onError(new Exception(userResponse.getMessage()));
                     }
+                } else {
+                    System.out.println("LoginDataSource: Resposta do servidor não foi bem-sucedida");
+                    callback.onError(new Exception("Resposta do servidor inválida"));
                 }
             }
 
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
-                callback.onError(new Exception("Error logging in", t));
+                System.out.println("LoginDataSource: Falha de conexão - " + t.getMessage());
+                callback.onError(new Exception("Erro de conexão", t));
             }
         });
     }
+
 
     public interface ResultCallback<T> {
         void onSuccess(Result<T> result);
