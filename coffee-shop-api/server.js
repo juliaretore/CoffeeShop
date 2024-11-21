@@ -1,17 +1,21 @@
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv').config(); // Carregar as variáveis do arquivo .env
+const bcrypt = require('bcryptjs');
+require('dotenv').config(); 
 console.log('MONGO_URL:', process.env.MONGO_URL);
 
 const app = express();
-const port = process.env.PORT || 8000; // Porta definida no ambiente ou padrão 8000
+const port = process.env.PORT || 8000;
 
-// Conectar ao MongoDB usando a URL do .env
+// middleware para parsear o corpo das requisicoes JSON
+app.use(express.json());
+
+// conectar ao MongoDB usando a URL do .env
 mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('Conectado ao MongoDB'))
     .catch(err => console.error('Erro ao conectar ao MongoDB:', err));
 
-// Modelo de Produto
+// modelo produto
 const produtoSchema = new mongoose.Schema({
     id: Number,
     name: String,
@@ -20,9 +24,10 @@ const produtoSchema = new mongoose.Schema({
     image: String,
     category: Number,
 });
+
 const Produto = mongoose.model('Produto', produtoSchema);
 
-// Rota para buscar produtos
+// buscar produtos
 app.get('/api/produtos', async (req, res) => {
     const category = req.query.category;
     try {
@@ -35,7 +40,72 @@ app.get('/api/produtos', async (req, res) => {
     }
 });
 
-// Iniciar o servidor
+// modelo user
+const userSchema = new mongoose.Schema({
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    address: String,
+    phone: String
+});
+
+// middleware para hash de senha
+userSchema.pre('save', async function(next) {
+    if (this.isModified('password') || this.isNew) {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
+    next();
+});
+
+const User = mongoose.model('User', userSchema);
+
+// registrar
+app.post('/api/register', async (req, res) => {
+    console.log('Requisição recebida no /api/register:', req.body); // Adicionar log
+    try {
+        const { username, email, password, address, phone } = req.body;
+        const newUser = new User({ username, email, password, address, phone });
+        await newUser.save();
+        res.status(201).send('Usuário registrado com sucesso');
+    } catch (error) {
+        console.error('Erro ao registrar usuário:', error.message); // Log de erro
+        res.status(400).send(error.message);
+    }
+});
+
+
+// login
+app.post('/api/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(404).send('Usuário não encontrado');
+        }
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (isMatch) {
+            res.send('Login bem-sucedido');
+        } else {
+            res.status(401).send('Senha incorreta');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Buscar todos os usuários (sem expor senhas)
+app.get('/api/users', async (req, res) => {
+    try {
+        // Buscar todos os usuários, mas sem retornar o campo `password`
+        const users = await User.find({}, { password: 0 }); // `{ password: 0 }` exclui o campo password
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao buscar usuários' });
+    }
+});
+
+
+// iniciar servidor
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
 });
