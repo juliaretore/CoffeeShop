@@ -42,35 +42,59 @@
             android:id="@+id/product_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="R$ 15,00"
+            android:text="R$ 1,00"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginTop="8dp" />
 
-        <!-- Quantidade e botão de incremento -->
+        <!-- Contador de incremento -->
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical">
 
+            <!-- Botão - -->
+            <Button
+                android:id="@+id/decrement_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textSize="14sp"
+                android:padding="8dp"
+                android:minWidth="50dp"
+                android:minHeight="50dp"
+                android:layout_marginEnd="8dp"/>
+
+            <!-- Campo de incremento -->
             <TextView
-                android:id="@+id/product_quantity"
+                android:id="@+id/increment_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textSize="16sp"
-                android:paddingEnd="8dp"
-                android:paddingStart="8dp" />
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:layout_marginEnd="16dp"/>
 
-<!--            <ImageButton-->
-<!--                android:id="@+id/increment_button"-->
-<!--                android:layout_width="10dp"-->
-<!--                android:layout_height="10dp"-->
-<!--                android:src="@drawable/ic_add"-->
-<!--                android:background="?android:attr/selectableItemBackgroundBorderless"-->
-<!--                android:contentDescription="Incrementar quantidade" />-->
+            <!-- Botão + -->
+            <Button
+                android:id="@+id/increment_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:textSize="14sp"
+                android:padding="8dp"
+                android:minWidth="50dp"
+                android:minHeight="50dp"/>
         </LinearLayout>
+        <TextView
+            android:id="@+id/product_total_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Valor total: R$ 0,00"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
