@@ -9,17 +9,17 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash); // Certifique-se de ter um layout chamado activity_splash
+        setContentView(R.layout.activity_splash);
 
-        // Aguarda 3 segundos antes de iniciar a próxima atividade
+        // espera 3 segundos antes de abrir o app
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Troca para a próxima atividade
+                // abre o app
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
-                finish(); // Fecha a SplashActivity
+                finish(); // fecha a tela de "carregamento"
             }
-        }, 3000); // 3000ms = 3 segundos
+        }, 3000);
     }
 }
