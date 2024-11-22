@@ -4,14 +4,16 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.coffeeshop.data.CartManager;
 import com.example.coffeeshop.model.Product;
 import com.google.android.material.tabs.TabLayout;
 import java.util.List;
 import java.util.ArrayList;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import com.example.coffeeshop.api.ApiService;
 import com.example.coffeeshop.api.ApiClient;
 
@@ -26,9 +28,9 @@ public class ShopFragment extends Fragment {
     private TabLayout tabLayout;
     private List<Product> productList = new ArrayList<>();
     private ProductAdapter productAdapter;
-    private int selectedCategory = 0; // 0 = Cafés, 1 = Salgados, 2 = Doces
+    private int selectedCategory = 0; // 0 = Drinks, 1 = Bebidas, 2 = Conveniência
+    private TextView welcomeTextView;
 
-    // Esse método irá ser chamado para criar a view do Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,27 +40,37 @@ public class ShopFragment extends Fragment {
         // Inicializa as views do layout
         tabLayout = rootView.findViewById(R.id.tabLayout);
         itemsRecyclerView = rootView.findViewById(R.id.itemsRecyclerView);
+        welcomeTextView = rootView.findViewById(R.id.welcome_user);
 
         // Configura o RecyclerView
         itemsRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
-        // Inicializa o adaptador
-        productAdapter = new ProductAdapter(productList);
+        // Inicializa o adaptador com o CartManager
+        productAdapter = new ProductAdapter(productList, CartManager.getInstance());
         itemsRecyclerView.setAdapter(productAdapter);
 
-        // Cria a lista de produtos (essa lista deve vir do seu backend)
+        // Atualiza a mensagem de boas-vindas
+        updateWelcomeMessage();
+
+        // Carregar produtos iniciais
         loadProducts();
 
         // Configura as abas de categorias
-        tabLayout.addTab(tabLayout.newTab().setText("Cafés"));
-        tabLayout.addTab(tabLayout.newTab().setText("Salgados"));
-        tabLayout.addTab(tabLayout.newTab().setText("Doces"));
+        configureTabLayout();
+
+        return rootView;
+    }
+
+    private void configureTabLayout() {
+        tabLayout.addTab(tabLayout.newTab().setText("Drinks"));
+        tabLayout.addTab(tabLayout.newTab().setText("Bebidas"));
+        tabLayout.addTab(tabLayout.newTab().setText("Conveniência"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 selectedCategory = tab.getPosition();
-                loadProducts(); // Filtra os produtos conforme a categoria
+                loadProducts(); // Atualiza os produtos conforme a categoria selecionada
             }
 
             @Override
@@ -67,8 +79,17 @@ public class ShopFragment extends Fragment {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+    }
 
-        return rootView;
+    // Atualiza a mensagem de boas-vindas
+    private void updateWelcomeMessage() {
+        String userName = getActivity().getIntent().getStringExtra("USER_NAME");
+
+        if (userName != null) {
+            welcomeTextView.setText("Bem-vindo, " + userName + "!");
+        } else {
+            welcomeTextView.setText("Bem-vindo!");
+        }
     }
 
     // Carrega produtos conforme a categoria selecionada
@@ -82,21 +103,17 @@ public class ShopFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("ShopFragment", "Resposta da API: " + response.body().toString()); // Adicionado log
+                    Log.d("ShopFragment", "Resposta da API: " + response.body().toString());
                     productList.clear();
                     productList.addAll(response.body());
-                    productAdapter.notifyDataSetChanged(); // Atualizar RecyclerView
+                    productAdapter.notifyDataSetChanged(); // Atualiza o RecyclerView
                 } else {
-                    // Lidar com erro na resposta
                     Log.e("ShopFragment", "Erro ao carregar produtos: " + response.message());
                 }
             }
 
-
-
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-                // Lidar com falhas na requisição
                 Log.e("ShopFragment", "Falha na API: " + t.getMessage());
             }
         });

@@ -12,6 +12,12 @@
         tools:layout="@layout/shop_activity" />
 
     <fragment
+        android:id="@+id/navigation_cart"
+        android:name="com.example.coffeeshop.ui.cart.CartFragment"
+        android:label="Cart"
+        tools:layout="@layout/fragment_cart" />
+
+    <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.coffeeshop.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
