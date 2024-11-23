@@ -55,6 +55,8 @@ public class LoginActivity extends AppCompatActivity {
         registerTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
                 String username = usernameEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
 
@@ -65,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 loadingProgressBar.setVisibility(View.VISIBLE);
 
-                loginViewModel.login(username, password);
+                //loginViewModel.login(username, password);
             }
         });
 
