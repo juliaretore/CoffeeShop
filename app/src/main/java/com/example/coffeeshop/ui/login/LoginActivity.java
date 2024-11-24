@@ -137,6 +137,10 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtra("USER_PHONE", model.getPhone());
         intent.putExtra("USER_ADDRESS", model.getAddress());
 
+        // Se os pedidos estiverem disponíveis, adicioná-los ao Intent
+        if (model.getOrders() != null) {
+            intent.putExtra("USER_ORDERS", (java.io.Serializable) model.getOrders());
+        }
         // Logs para depuração
         System.out.println("LoginActivity: Dados enviados para MainActivity:");
         System.out.println("USER_ID: " + model.getId());

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.coffeeshop.model.CartItem;
+import com.example.coffeeshop.model.Order;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +25,9 @@ public class MainActivity extends AppCompatActivity {
     private String userName;
     private String userFullName;
     private String userEmail;
-    private List<CartItem> cartItems; // Lista de itens do carrinho
+    private List<CartItem> cartItems; // itens do carrinho
+    private List<Order> userOrders; // pedidos do usuário
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Inicializa a lista do carrinho
         cartItems = new ArrayList<>();
+        userOrders = new ArrayList<>();
 
         // Recebe os dados do usuário passados pela LoginActivity
         userId = getIntent().getStringExtra("USER_ID");
@@ -43,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
         userFullName = getIntent().getStringExtra("USER_NAME");
         userEmail = getIntent().getStringExtra("USER_EMAIL");
 
+        if (getIntent().hasExtra("USER_ORDERS")) {
+            userOrders = (List<Order>) getIntent().getSerializableExtra("USER_ORDERS");
+        } else {
+            Log.d("MainActivity", "Nenhum pedido encontrado para o usuário.");
+        }
 
         // Validação de dados recebidos
         if (userId == null || userFullName == null || userEmail == null || userName == null) {
@@ -89,6 +98,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void removeItemFromCart(CartItem item) {
         cartItems.remove(item);
+    }
+
+    public List<Order> getUserOrders() {
+        return userOrders;
     }
 
     public void clearCart() {

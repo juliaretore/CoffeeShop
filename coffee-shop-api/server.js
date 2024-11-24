@@ -121,7 +121,8 @@ app.post('/api/login', async (req, res) => {
                     username: user.username,
                     email: user.email,
                     address: user.address,
-                    phone: user.phone
+                    phone: user.phone,
+                    orders: user.orders
                 }
             };
             console.log("Resposta enviada para o cliente:", response); // Adicione este log

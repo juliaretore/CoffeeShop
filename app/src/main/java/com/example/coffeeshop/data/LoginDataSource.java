@@ -58,6 +58,7 @@ public class LoginDataSource {
                         System.out.println("Email: " + user.getEmail());
                         System.out.println("Address: " + user.getAddress());
                         System.out.println("Phone: " + user.getPhone());
+                        System.out.println("Orders: " + user.getOrders());
 
                         LoggedInUser loggedInUser = new LoggedInUser(
                                 user.getId(),
@@ -65,7 +66,8 @@ public class LoginDataSource {
                                 user.getUsername(),
                                 user.getEmail(),
                                 user.getAddress(),
-                                user.getPhone()
+                                user.getPhone(),
+                                user.getOrders()
                         );
                         System.out.println("LoginDataSource: Login bem-sucedido para " + loggedInUser.getName());
                         callback.onSuccess(new Result.Success<>(loggedInUser));

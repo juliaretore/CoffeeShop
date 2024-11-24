@@ -57,7 +57,8 @@ public class LoginViewModel extends ViewModel {
                                 data.getUsername(),
                                 data.getEmail(),
                                 data.getAddress(),
-                                data.getPhone()
+                                data.getPhone(),
+                                data.getOrders()
                         )
                 ));
             }
