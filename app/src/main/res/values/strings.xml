@@ -26,5 +26,13 @@
     <string name="order_total">Total: R$ %1$.2f</string>
     <string name="order_items">%1$d itens</string>
 
+    <string name="prompt_login">nome de usuario</string>
+    <string name="prompt_login_senha">senha</string>
+    <string name="prompt_login_entrar">login</string>
+    <string name="prompt_cadastro">cadastrar-se</string>
+    <string name="prompt_sem_cadastro">Junte</string>
+
+
+
 
 </resources>
