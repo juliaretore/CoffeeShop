@@ -16,6 +16,7 @@ import java.util.List;
 public interface ApiService {
     @GET("api/produtos")
     Call<List<Product>> getProducts(@Query("category") int category); // endpoint com parâmetro de categoria
+
     @POST("api/register")
     Call<UserResponse> registerUser(@Body User user); // endpoint para registrar usuários
 
@@ -25,9 +26,6 @@ public interface ApiService {
     @POST("api/orders")
     Call<Order> createOrder(@Body OrderRequest orderRequest);
 
-
     @GET("api/users/{username}")
     Call<User> getUserDetails(@Path("username") String username);
-
-
 }

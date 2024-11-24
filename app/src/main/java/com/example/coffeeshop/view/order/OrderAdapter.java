@@ -33,7 +33,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         Order order = orders.get(position);
 
-        holder.textViewOrderId.setText("Pedido #" + order.getId());
+        holder.textViewOrderId.setText("Pedido #" + (position+1));
         holder.textViewOrderDate.setText("Data: " + order.getTimestamp());
         holder.textViewOrderTotal.setText(String.format("Total: R$ %.2f", order.getTotalPrice()));
         holder.textViewItemCount.setText("Itens: " + order.getItems().size());
@@ -55,5 +55,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             textViewOrderTotal = itemView.findViewById(R.id.textViewOrderTotal);
             textViewItemCount = itemView.findViewById(R.id.textViewItemCount);
         }
+
     }
 }

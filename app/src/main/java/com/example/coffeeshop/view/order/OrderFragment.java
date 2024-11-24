@@ -16,6 +16,7 @@ import com.example.coffeeshop.R;
 import com.example.coffeeshop.model.Order;
 import com.example.coffeeshop.view.main.MainActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderFragment extends Fragment {
@@ -23,35 +24,44 @@ public class OrderFragment extends Fragment {
     private RecyclerView recyclerViewOrders;
     private OrderAdapter orderAdapter;
     private TextView textViewNoOrders;
+    private List<Order> orders;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflar o layout do fragmento
-        View view = inflater.inflate(R.layout.fragment_order, container, false);
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.fragment_order, container, false);
 
-        // Inicializar os elementos do layout
-        recyclerViewOrders = view.findViewById(R.id.recyclerViewOrders);
-        textViewNoOrders = view.findViewById(R.id.textViewNoOrders);
+            recyclerViewOrders = view.findViewById(R.id.recyclerViewOrders);
+            textViewNoOrders = view.findViewById(R.id.textViewNoOrders);
 
-        // Configurar o RecyclerView
-        recyclerViewOrders.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerViewOrders.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Obter os pedidos do usuário
-        MainActivity mainActivity = (MainActivity) getActivity();
-        if (mainActivity != null) {
-            List<Order> orders = mainActivity.getUserOrders(); // Função que retorna os pedidos
-            if (orders != null && !orders.isEmpty()) {
-                textViewNoOrders.setVisibility(View.GONE);
-                recyclerViewOrders.setVisibility(View.VISIBLE);
-                orderAdapter = new OrderAdapter(orders);
-                recyclerViewOrders.setAdapter(orderAdapter);
-            } else {
-                recyclerViewOrders.setVisibility(View.GONE);
-                textViewNoOrders.setVisibility(View.VISIBLE);
-            }
+            // Inicializar a lista de pedidos
+            orders = new ArrayList<>();
+
+            // Inicializa o adaptador com a lista de pedidos
+            orderAdapter = new OrderAdapter(orders);
+            recyclerViewOrders.setAdapter(orderAdapter);
+
+            // Verificar se há pedidos para exibir
+            updateOrdersList();
+
+            return view;
         }
 
-        return view;
+        public void updateOrdersList() {
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if (mainActivity != null) {
+                orders = mainActivity.getUserOrders();  // Atualiza a lista de pedidos
+                if (orders != null && !orders.isEmpty()) {
+                    textViewNoOrders.setVisibility(View.GONE);
+                    recyclerViewOrders.setVisibility(View.VISIBLE);
+                    orderAdapter = new OrderAdapter(orders);
+                    recyclerViewOrders.setAdapter(orderAdapter);
+                } else {
+                    recyclerViewOrders.setVisibility(View.GONE);
+                    textViewNoOrders.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
-}
