@@ -33,7 +33,7 @@ public class User {
         // Construtor vazio necessário para Gson
     }
 
-    // Construtor para criar um novo usuário (sem pedidos)
+    // Construtor para criar um novo usuário (sem pedidos/id)
     public User(String name, String username, String email, String password, String address, String phone) {
         this.name = name;
         this.username = username;
@@ -44,12 +44,11 @@ public class User {
     }
 
     // Construtor completo, usado ao receber dados do backend
-    public User(String id, String name, String username, String email, String password, String address, String phone, List<Order> orders) {
-        this.id = id;
+    public User(String userId, String name, String username, String email, String address, String phone, List<Order> orders) {
+        this.id = userId;
         this.name = name;
         this.username = username;
         this.email = email;
-        this.password = password;
         this.address = address;
         this.phone = phone;
         this.orders = orders;

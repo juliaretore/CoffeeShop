@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/branco"
     android:padding="16dp"
-    tools:context=".ui.register.RegisterActivity">
+    tools:context=".view.register.RegisterActivity">
 
     <!-- Logo do Aplicativo -->
 

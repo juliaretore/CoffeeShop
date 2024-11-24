@@ -7,25 +7,25 @@
 
     <fragment
         android:id="@+id/navigation_shop"
-        android:name="com.example.coffeeshop.ui.shop.ShopFragment"
+        android:name="com.example.coffeeshop.view.shop.ShopFragment"
         android:label="Shop"
         tools:layout="@layout/shop_activity" />
 
     <fragment
         android:id="@+id/navigation_cart"
-        android:name="com.example.coffeeshop.ui.cart.CartFragment"
+        android:name="com.example.coffeeshop.view.cart.CartFragment"
         android:label="Cart"
         tools:layout="@layout/fragment_cart" />
 
     <fragment
         android:id="@+id/navigation_order"
-        android:name="com.example.coffeeshop.ui.orders.OrderFragment"
+        android:name="com.example.coffeeshop.view.order.OrderFragment"
         android:label="Order"
         tools:layout="@layout/fragment_order" />
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.example.coffeeshop.ui.profile.ProfileFragment"
+        android:name="com.example.coffeeshop.view.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 
