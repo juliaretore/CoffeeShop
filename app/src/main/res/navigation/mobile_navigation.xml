@@ -23,4 +23,10 @@
         android:label="Order"
         tools:layout="@layout/fragment_order" />
 
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.coffeeshop.ui.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
 </navigation>

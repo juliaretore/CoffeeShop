@@ -55,6 +55,5 @@ public class LoginRepository {
 
     public void logout() {
         loggedInUser = null;
-        // Se necessário, implementar lógica adicional para limpar dados persistidos
     }
 }
