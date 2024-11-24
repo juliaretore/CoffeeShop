@@ -12,7 +12,7 @@ public class UserResponse {
     private String message;
 
     @SerializedName("user")
-    private User user; // O objeto User retornado pelo backend
+    private User user;
 
     public boolean isSuccess() {
         return success;
@@ -24,5 +24,11 @@ public class UserResponse {
 
     public User getUser() {
         return user;
+    }
+
+    public UserResponse(boolean success, String message, User user) {
+        this.success = success;
+        this.message = message;
+        this.user = user;
     }
 }

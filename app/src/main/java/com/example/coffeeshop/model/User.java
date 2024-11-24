@@ -2,23 +2,40 @@ package com.example.coffeeshop.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class User {
-    @SerializedName("username")
+    @SerializedName("id") // ID único retornado pelo backend
+    private String id;
+
+    @SerializedName("name") // Nome completo do usuário
+    private String name;
+
+    @SerializedName("username") // Nome de usuário (@usuario) para login
     private String username;
 
-    @SerializedName("email")
+    @SerializedName("email") // Email do usuário
     private String email;
 
-    @SerializedName("password")
+    @SerializedName("password") // Senha do usuário
     private String password;
 
-    @SerializedName("address")
+    @SerializedName("address") // Endereço do usuário
     private String address;
 
-    @SerializedName("phone")
+    @SerializedName("phone") // Telefone do usuário
     private String phone;
 
-    public User(String username, String email, String password, String address, String phone) {
+    @SerializedName("orders") // Lista de pedidos associados ao usuário
+    private List<Order> orders;
+
+    public User() {
+        // Construtor vazio necessário para Gson
+    }
+
+    // Construtor para criar um novo usuário (sem pedidos)
+    public User(String name, String username, String email, String password, String address, String phone) {
+        this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
@@ -26,7 +43,35 @@ public class User {
         this.phone = phone;
     }
 
+    // Construtor completo, usado ao receber dados do backend
+    public User(String id, String name, String username, String email, String password, String address, String phone, List<Order> orders) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.phone = phone;
+        this.orders = orders;
+    }
+
     // Getters e Setters
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -65,5 +110,13 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }
