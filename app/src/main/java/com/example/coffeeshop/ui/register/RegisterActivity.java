@@ -1,10 +1,12 @@
 package com.example.coffeeshop.ui.register;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import com.example.coffeeshop.api.ApiClient;
 import com.example.coffeeshop.api.ApiService;
 import com.example.coffeeshop.data.model.UserResponse;
 import com.example.coffeeshop.model.User;
+import com.example.coffeeshop.ui.login.LoginActivity;
 
 import java.io.IOException;
 
@@ -44,6 +47,17 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Configurar o botão de registro
         registerButton.setOnClickListener(v -> registerUser());
+        TextView textViewLogin = findViewById(R.id.textViewLogin);
+        textViewLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navegar para a LoginActivity
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+                // Opcional: Finalizar a RegisterActivity para evitar voltar a ela
+                finish();
+            }
+        });
     }
 
     private void registerUser() {
