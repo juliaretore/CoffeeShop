@@ -1,34 +1,26 @@
 package com.example.coffeeshop.view.register;
 
-import android.content.Intent;
+import android.content.SyncStatusObserver;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.coffeeshop.R;
-import com.example.coffeeshop.model.api.ApiClient;
-import com.example.coffeeshop.model.api.ApiService;
-import com.example.coffeeshop.model.UserResponse;
-import com.example.coffeeshop.model.User;
+import com.example.coffeeshop.controller.RegisterController;
+import android.content.Intent;
+import android.widget.TextView;
 import com.example.coffeeshop.view.login.LoginActivity;
 
-import java.io.IOException;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText fullNameEditText, usernameEditText, emailEditText, passwordEditText, addressEditText, phoneEditText;
     private Button registerButton;
     private ProgressBar loadingProgressBar;
+    private RegisterController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +38,16 @@ public class RegisterActivity extends AppCompatActivity {
         loadingProgressBar = findViewById(R.id.register_loading);
 
         // Configurar o botão de registro
-        registerButton.setOnClickListener(v -> registerUser());
+        controller = new RegisterController(this);
+
+        registerButton.setOnClickListener(v -> controller.onRegisterClicked(
+                fullNameEditText.getText().toString().trim(),
+                usernameEditText.getText().toString().trim(),
+                emailEditText.getText().toString().trim(),
+                passwordEditText.getText().toString().trim(),
+                addressEditText.getText().toString().trim(),
+                phoneEditText.getText().toString().trim()
+        ));
         TextView textViewLogin = findViewById(R.id.textViewLogin);
         textViewLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,71 +61,20 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void registerUser() {
-        System.out.println("Método registerUser foi chamado!");
-
-        // Capturar valores dos campos
-        String fullName = fullNameEditText.getText().toString().trim();
-        String username = usernameEditText.getText().toString().trim();
-        String email = emailEditText.getText().toString().trim();
-        String password = passwordEditText.getText().toString().trim();
-        String address = addressEditText.getText().toString().trim();
-        String phone = phoneEditText.getText().toString().trim();
-
-        // Log para depuração
-        System.out.println("Dados preenchidos: " +
-                "\nFull Name: " + fullName +
-                "\nUsername: " + username +
-                "\nEmail: " + email +
-                "\nPassword: " + password +
-                "\nAddress: " + address +
-                "\nPhone: " + phone);
-
-        // Validação
-        if (fullName.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty() || address.isEmpty() || phone.isEmpty()) {
-            Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
+    public void showLoading() {
         loadingProgressBar.setVisibility(View.VISIBLE);
+    }
 
-        // Criar instância do User com o novo campo
-        ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
-        User newUser = new User(fullName, username, email, password, address, phone);
+    public void hideLoading() {
+        loadingProgressBar.setVisibility(View.GONE);
+    }
 
-        // Fazer a requisição de registro
-        Call<UserResponse> call = apiService.registerUser(newUser);
+    public void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
 
-        call.enqueue(new Callback<UserResponse>() {
-            @Override
-            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                loadingProgressBar.setVisibility(View.GONE);
-
-                if (response.isSuccessful() && response.body() != null) {
-                    UserResponse userResponse = response.body();
-                    if (userResponse.isSuccess()) {
-                        Toast.makeText(RegisterActivity.this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
-                        finish(); // Voltar para a tela anterior
-                    } else {
-                        Toast.makeText(RegisterActivity.this, "Erro: " + userResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    try {
-                        System.out.println("Erro ao registrar: " + response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Toast.makeText(RegisterActivity.this, "Erro ao realizar cadastro", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserResponse> call, Throwable t) {
-                loadingProgressBar.setVisibility(View.GONE);
-                System.out.println("Erro de conexão: " + t.getMessage());
-                t.printStackTrace();
-                Toast.makeText(RegisterActivity.this, "Erro de conexão", Toast.LENGTH_SHORT).show();
-            }
-        });
+    public void showSuccess(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        finish();
     }
 }
