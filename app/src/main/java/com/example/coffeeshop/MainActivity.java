@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private String userName;
     private String userFullName;
     private String userEmail;
+    private String userPhone;
+    private String userAddress;
     private List<CartItem> cartItems; // itens do carrinho
     private List<Order> userOrders; // pedidos do usuário
 
@@ -46,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         userName = getIntent().getStringExtra("USER_USERNAME");
         userFullName = getIntent().getStringExtra("USER_NAME");
         userEmail = getIntent().getStringExtra("USER_EMAIL");
+        userPhone = getIntent().getStringExtra("USER_PHONE");
+        userAddress = getIntent().getStringExtra("USER_ADDRESS");
+
 
         if (getIntent().hasExtra("USER_ORDERS")) {
             userOrders = (List<Order>) getIntent().getSerializableExtra("USER_ORDERS");
@@ -85,6 +90,14 @@ public class MainActivity extends AppCompatActivity {
 
     public String getUserEmail() {
         return userEmail;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public String getUserAddress() {
+        return userAddress;
     }
 
     // Métodos para manipular o carrinho

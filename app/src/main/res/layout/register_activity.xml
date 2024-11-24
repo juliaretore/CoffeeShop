@@ -15,8 +15,8 @@
 
     <ImageView
         android:id="@+id/register_logo"
-        android:layout_width="109dp"
-        android:layout_height="66dp"
+        android:layout_width="103dp"
+        android:layout_height="58dp"
         android:layout_marginTop="8dp"
         android:adjustViewBounds="true"
         android:contentDescription="fogologo"
@@ -133,21 +133,22 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Botão de Registro -->
+
+    <!-- Barra de Progresso -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/register_button"
         android:layout_width="147dp"
         android:layout_height="58dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@color/azul"
         android:elevation="8dp"
         android:text="@string/action_register"
         android:textColor="@android:color/white"
         app:cornerRadius="24dp"
-        app:layout_constraintTop_toBottomOf="@id/phoneInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/phoneInputLayout" />
 
-    <!-- Barra de Progresso -->
     <ProgressBar
         android:id="@+id/register_loading"
         android:layout_width="wrap_content"
@@ -158,4 +159,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
+    <!-- Link para Login -->
+    <TextView
+        android:id="@+id/textViewLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Já possui cadastro? Faça login"
+        android:textColor="@color/azul"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/register_loading" />
 </androidx.constraintlayout.widget.ConstraintLayout>
