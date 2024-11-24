@@ -44,12 +44,6 @@ public class MainActivity extends AppCompatActivity {
         userEmail = getIntent().getStringExtra("USER_EMAIL");
 
 
-        // Logs para depuração
-        Log.d("MainActivity", "ID do usuário: " + userId);
-        Log.d("MainActivity", "Nome de usuário: " + userName);
-        Log.d("MainActivity", "Nome completo: " + userFullName);
-        Log.d("MainActivity", "E-mail do usuário: " + userEmail);
-
         // Validação de dados recebidos
         if (userId == null || userFullName == null || userEmail == null || userName == null) {
             Log.e("MainActivity", "Dados do usuário incompletos! Finalizando atividade.");

@@ -147,8 +147,14 @@ app.post('/api/orders', async (req, res) => {
             return res.status(404).send({ message: 'Usuário não encontrado' });
         }
 
+        // Mapear os itens para incluir o campo `product` como ObjectId
+        const processedItems = items.map(item => ({
+            product: new mongoose.Types.ObjectId(item.productId), // Converte productId para ObjectId
+            quantity: item.quantity
+        }));
+
         const newOrder = {
-            items,
+            items: processedItems,
             totalPrice,
             timestamp: new Date(),
         };
@@ -158,9 +164,12 @@ app.post('/api/orders', async (req, res) => {
 
         res.status(201).send({ message: 'Pedido criado com sucesso', order: newOrder });
     } catch (error) {
+        console.error('Erro ao criar pedido:', error);
         res.status(500).send({ message: 'Erro ao criar pedido', error });
     }
 });
+
+
 
 // buscar pelo username
 app.get('/api/users/:username', async (req, res) => {

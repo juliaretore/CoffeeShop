@@ -25,6 +25,7 @@ public interface ApiService {
     @POST("api/orders")
     Call<Order> createOrder(@Body OrderRequest orderRequest);
 
+
     @GET("api/users/{username}")
     Call<User> getUserDetails(@Path("username") String username);
 

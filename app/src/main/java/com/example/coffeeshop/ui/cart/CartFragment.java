@@ -11,8 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,14 +19,15 @@ import com.example.coffeeshop.R;
 import com.example.coffeeshop.api.ApiClient;
 import com.example.coffeeshop.api.ApiService;
 import com.example.coffeeshop.data.CartManager;
-import com.example.coffeeshop.data.LoginDataSource;
-import com.example.coffeeshop.data.LoginRepository;
-import com.example.coffeeshop.data.model.LoggedInUser;
 import com.example.coffeeshop.data.model.OrderRequest;
 import com.example.coffeeshop.model.CartItem;
 import com.example.coffeeshop.model.Order;
+import com.example.coffeeshop.model.Product;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,6 +50,7 @@ public class CartFragment extends Fragment implements CartAdapter.OnCartItemActi
         totalTextView = rootView.findViewById(R.id.cart_total_text);
         checkoutButton = rootView.findViewById(R.id.checkout_button);
 
+
         // configura o RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -61,10 +61,8 @@ public class CartFragment extends Fragment implements CartAdapter.OnCartItemActi
         cartAdapter = new CartAdapter(cartItems, this);
         recyclerView.setAdapter(cartAdapter);
 
-        // atualiza o total inicial
         updateTotal();
 
-        // configura o botão
         checkoutButton.setOnClickListener(v -> performCheckout());
 
         return rootView;
@@ -99,62 +97,63 @@ public class CartFragment extends Fragment implements CartAdapter.OnCartItemActi
         double total = CartManager.getInstance().getTotal();
         totalTextView.setText(String.format("Total: R$ %.2f", total));
     }
-
     private void performCheckout() {
-        // validar se o carrinho está vazio
-        if (!validateCart()) return;
-
-        // criar a requisição do pedido
-        OrderRequest orderRequest = createOrderRequest();
-
-        // enviar o pedido ao backend
-        sendOrder(orderRequest);
-    }
-
-    private boolean validateCart() {
+        // Validação do carrinho
         if (cartItems.isEmpty()) {
             Toast.makeText(getContext(), "Carrinho vazio", Toast.LENGTH_SHORT).show();
-            return false;
+            return;
         }
-        return true;
-    }
 
-    private OrderRequest createOrderRequest() {
-        // Obter a MainActivity
+        // Obter dados do usuário a partir da MainActivity
         MainActivity mainActivity = (MainActivity) getActivity();
-
-        // Certifique-se de que a MainActivity não é nula
         if (mainActivity == null) {
-            throw new IllegalStateException("MainActivity não está disponível");
+            Toast.makeText(getContext(), "Erro ao acessar dados do usuário", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        // Obter o e-mail do usuário
-        String userEmail = mainActivity.getUserEmail();
-
-        if (userEmail == null || userEmail.isEmpty()) {
-            throw new IllegalStateException("E-mail do usuário não está disponível!");
+        String userId = mainActivity.getUserId();
+        if (userId == null || userId.isEmpty()) {
+            Toast.makeText(getContext(), "Usuário não identificado", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        // Obter o preço total
+        // Criar a lista de itens do pedido
+        List<OrderRequest.OrderItem> orderItems = new ArrayList<>();
+        for (CartItem cartItem : cartItems) {
+            int productId = cartItem.getProduct().getId(); // Certifique-se que `getId()` existe no Product
+            int quantity = cartItem.getQuantity();
+            orderItems.add(new OrderRequest.OrderItem(productId, quantity));
+        }
+
+        // Criar o pedido
         double totalPrice = CartManager.getInstance().getTotal();
+        OrderRequest orderRequest = new OrderRequest(userId, orderItems, totalPrice);
 
-        // Criar e retornar o pedido
-        return new OrderRequest(userEmail, cartItems, totalPrice);
+        // Log do pedido
+        System.out.println("Pedido sendo enviado:");
+        System.out.println("UserId: " + userId);
+        System.out.println("Itens: " + cartItems.size());
+        System.out.println("Total: " + totalPrice);
+        // Enviar pedido ao backend
+        sendOrder(orderRequest);
     }
 
 
     private void sendOrder(OrderRequest orderRequest) {
         ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
+
         apiService.createOrder(orderRequest).enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    System.out.println("Resposta do servidor: Pedido criado com sucesso!");
                     Toast.makeText(getContext(), "Pedido realizado com sucesso!", Toast.LENGTH_SHORT).show();
-                    // Limpar o carrinho
+                    // Limpar carrinho
                     CartManager.getInstance().clearCart();
                     cartAdapter.notifyDataSetChanged();
                     updateTotal();
                 } else {
+                    System.out.println("Erro na resposta do servidor: " + response.message());
                     Toast.makeText(getContext(), "Erro ao realizar pedido", Toast.LENGTH_SHORT).show();
                 }
             }
