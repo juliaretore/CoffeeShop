@@ -28,13 +28,23 @@ public class ProfileFragment extends Fragment {
         if (mainActivity != null) {
             String userName = mainActivity.getUserFullName();
             String userEmail = mainActivity.getUserEmail();
+            String userUsername = mainActivity.getUserName();
+            String userPhone = mainActivity.getUserPhone();
+            String userAddress = mainActivity.getUserAddress();
 
             // Preencher as informações no layout
             TextView nameTextView = view.findViewById(R.id.profile_name);
+            TextView userTextView = view.findViewById(R.id.profile_username);
             TextView emailTextView = view.findViewById(R.id.profile_email);
+            TextView phoneTextView = view.findViewById(R.id.profile_phone);
+            TextView addressTextView = view.findViewById(R.id.profile_address);
+
 
             nameTextView.setText(userName);
+            userTextView.setText(userUsername);
             emailTextView.setText(userEmail);
+            phoneTextView.setText(userPhone);
+            addressTextView.setText(userAddress);
         }
 
         // Configurar o botão de logout

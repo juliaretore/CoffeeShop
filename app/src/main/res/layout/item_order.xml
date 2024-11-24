@@ -1,37 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    android:background="@color/white"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
 
-    <TextView
-        android:id="@+id/textViewOrderId"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pedido #123"
-        android:textStyle="bold"
-        android:textSize="16sp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/textViewOrderDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Data: 01/01/2023"
-        android:textSize="14sp" />
+        <!-- Título do Pedido -->
+        <TextView
+            android:id="@+id/textViewOrderId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pedido #123"
+            android:textStyle="bold"
+            android:textColor="@color/preto"
+            android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/textViewOrderTotal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total: R$ 50.00"
-        android:textSize="14sp" />
+        <!-- Data do Pedido -->
+        <TextView
+            android:id="@+id/textViewOrderDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Data: 01/01/2023"
+            android:textColor="@color/azul"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/textViewItemCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Itens: 3"
-        android:textSize="14sp" />
-</LinearLayout>
+        <!-- Total do Pedido -->
+        <TextView
+            android:id="@+id/textViewOrderTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total: R$ 50.00"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="8dp"
+            android:textSize="16sp" />
+
+        <!-- Número de Itens -->
+        <TextView
+            android:id="@+id/textViewItemCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Itens: 3"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
