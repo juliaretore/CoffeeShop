@@ -23,5 +23,8 @@
     <string name="password_label">Senha</string>
     <string name="register_prompt">Ainda não possui cadastro? Cadastre-se</string>
     <string name="title_activity_register">Registrar</string>
+    <string name="order_total">Total: R$ %1$.2f</string>
+    <string name="order_items">%1$d itens</string>
+
 
 </resources>

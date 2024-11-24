@@ -9,7 +9,7 @@ import com.example.coffeeshop.data.LoginRepository;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
- * Required given LoginViewModel has a non-empty constructor
+ * Required given LoginViewModel has a non-empty constructor.
  */
 public class LoginViewModelFactory implements ViewModelProvider.Factory {
 
@@ -20,7 +20,7 @@ public class LoginViewModelFactory implements ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(LoginViewModel.class)) {
             return (T) new LoginViewModel(LoginRepository.getInstance(new LoginDataSource()));
         } else {
-            throw new IllegalArgumentException("Unknown ViewModel class");
+            throw new IllegalArgumentException("Classe ViewModel desconhecida: " + modelClass.getName());
         }
     }
 }

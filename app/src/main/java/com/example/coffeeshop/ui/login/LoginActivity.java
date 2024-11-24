@@ -1,17 +1,8 @@
 package com.example.coffeeshop.ui.login;
 
 import android.app.Activity;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -23,10 +14,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.coffeeshop.MainActivity;
 import com.example.coffeeshop.R;
-import com.example.coffeeshop.ui.login.LoginViewModel;
-import com.example.coffeeshop.ui.login.LoginViewModelFactory;
 import com.example.coffeeshop.databinding.ActivityLoginBinding;
 import com.example.coffeeshop.ui.register.RegisterActivity;
 
@@ -52,64 +47,37 @@ public class LoginActivity extends AppCompatActivity {
         final TextView registerTextView = binding.textViewRegister;
 
         // Listener para o botão "Cadastre-se"
-        registerTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = usernameEditText.getText().toString().trim();
-                String password = passwordEditText.getText().toString().trim();
+        registerTextView.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
 
-                // Adicionar logs para depuração
-                System.out.println("Tentando login com:");
-                System.out.println("Username: " + username);
-                System.out.println("Password: " + password);
-
-                loadingProgressBar.setVisibility(View.VISIBLE);
-
-                loginViewModel.login(username, password);
+        loginViewModel.getLoginFormState().observe(this, loginFormState -> {
+            if (loginFormState == null) {
+                return;
+            }
+            loginButton.setEnabled(loginFormState.isDataValid());
+            if (loginFormState.getUsernameError() != null) {
+                usernameEditText.setError(getString(loginFormState.getUsernameError()));
+            }
+            if (loginFormState.getPasswordError() != null) {
+                passwordEditText.setError(getString(loginFormState.getPasswordError()));
             }
         });
 
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
-            @Override
-            public void onChanged(@Nullable LoginFormState loginFormState) {
-                if (loginFormState == null) {
-                    return;
-                }
-                loginButton.setEnabled(loginFormState.isDataValid());
-                if (loginFormState.getUsernameError() != null) {
-                    usernameEditText.setError(getString(loginFormState.getUsernameError()));
-                }
-                if (loginFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
-                }
+        loginViewModel.getLoginResult().observe(this, loginResult -> {
+            if (loginResult == null) {
+                return;
             }
-        });
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
-            @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
-                if (loginResult == null) {
-                    return;
-                }
+            loadingProgressBar.setVisibility(View.GONE);
 
-                loadingProgressBar.setVisibility(View.GONE);
+            if (loginResult.getError() != null) {
+                showLoginFailed(loginResult.getError());
+            }
 
-                if (loginResult.getError() != null) {
-                    // Log de erro para depuração
-                    System.out.println("Erro no login: " + getString(loginResult.getError()));
-                    showLoginFailed(loginResult.getError());
-                }
-
-                if (loginResult.getSuccess() != null) {
-                    // Log de sucesso para depuração
-                    System.out.println("Login bem-sucedido. Usuário: " + loginResult.getSuccess().getDisplayName());
-                    updateUiWithUser(loginResult.getSuccess());
-                }
-
-                setResult(Activity.RESULT_OK);
-
-                // Não finalize a activity antes de verificar o sucesso
-                // finish();
+            if (loginResult.getSuccess() != null) {
+                updateUiWithUser(loginResult.getSuccess());
             }
         });
 
@@ -126,44 +94,61 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                loginViewModel.loginDataChanged(
+                        usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString()
+                );
             }
         };
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
-                }
-                return false;
+        passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                loginViewModel.login(
+                        usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString()
+                );
             }
+            return false;
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-            }
+        loginButton.setOnClickListener(v -> {
+            loadingProgressBar.setVisibility(View.VISIBLE);
+            loginViewModel.login(
+                    usernameEditText.getText().toString(),
+                    passwordEditText.getText().toString()
+            );
         });
     }
 
-
     private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
+        // Exibir mensagem de boas-vindas
+        String welcome = getString(R.string.welcome) + model.getName();
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
 
         // Criar um Intent para iniciar a MainActivity
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 
         // Adicionar informações do usuário ao Intent
-        intent.putExtra("USER_NAME", model.getDisplayName());
+        intent.putExtra("USER_ID", model.getId()); // Certifique-se de enviar o ID
+        intent.putExtra("USER_NAME", model.getName());
+        intent.putExtra("USER_EMAIL", model.getEmail());
+        intent.putExtra("USER_USERNAME", model.getUsername());
+        intent.putExtra("USER_PHONE", model.getPhone());
+        intent.putExtra("USER_ADDRESS", model.getAddress());
+
+        // Se os pedidos estiverem disponíveis, adicioná-los ao Intent
+        if (model.getOrders() != null) {
+            intent.putExtra("USER_ORDERS", (java.io.Serializable) model.getOrders());
+        }
+        // Logs para depuração
+        System.out.println("LoginActivity: Dados enviados para MainActivity:");
+        System.out.println("USER_ID: " + model.getId());
+        System.out.println("USER_NAME: " + model.getName());
+        System.out.println("USER_EMAIL: " + model.getEmail());
+        System.out.println("USER_USERNAME: " + model.getUsername());
+        System.out.println("USER_PHONE: " + model.getPhone());
+        System.out.println("USER_ADDRESS: " + model.getAddress());
 
         // Garante que a LoginActivity seja removida da pilha
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -174,6 +159,8 @@ public class LoginActivity extends AppCompatActivity {
         // Finaliza a LoginActivity
         finish();
     }
+
+
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();

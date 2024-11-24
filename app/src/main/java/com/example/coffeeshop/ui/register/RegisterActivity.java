@@ -23,7 +23,7 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText usernameEditText, emailEditText, passwordEditText, addressEditText, phoneEditText;
+    private EditText fullNameEditText, usernameEditText, emailEditText, passwordEditText, addressEditText, phoneEditText;
     private Button registerButton;
     private ProgressBar loadingProgressBar;
 
@@ -32,6 +32,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_activity);
 
+        // Inicializar os campos
+        fullNameEditText = findViewById(R.id.register_full_name);
         usernameEditText = findViewById(R.id.register_username);
         emailEditText = findViewById(R.id.register_email);
         passwordEditText = findViewById(R.id.register_password);
@@ -40,37 +42,43 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton = findViewById(R.id.register_button);
         loadingProgressBar = findViewById(R.id.register_loading);
 
+        // Configurar o botão de registro
         registerButton.setOnClickListener(v -> registerUser());
     }
 
     private void registerUser() {
         System.out.println("Método registerUser foi chamado!");
 
+        // Capturar valores dos campos
+        String fullName = fullNameEditText.getText().toString().trim();
         String username = usernameEditText.getText().toString().trim();
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
         String address = addressEditText.getText().toString().trim();
         String phone = phoneEditText.getText().toString().trim();
 
-        // Verifique os dados antes de enviar
+        // Log para depuração
         System.out.println("Dados preenchidos: " +
+                "\nFull Name: " + fullName +
                 "\nUsername: " + username +
                 "\nEmail: " + email +
                 "\nPassword: " + password +
                 "\nAddress: " + address +
                 "\nPhone: " + phone);
 
-        if (username.isEmpty() || email.isEmpty() || password.isEmpty() || address.isEmpty() || phone.isEmpty()) {
+        // Validação
+        if (fullName.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty() || address.isEmpty() || phone.isEmpty()) {
             Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show();
             return;
         }
 
         loadingProgressBar.setVisibility(View.VISIBLE);
 
+        // Criar instância do User com o novo campo
         ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
-        User newUser = new User(username, email, password, address, phone);
+        User newUser = new User(fullName, username, email, password, address, phone);
 
-        // Chamando o endpoint de registro
+        // Fazer a requisição de registro
         Call<UserResponse> call = apiService.registerUser(newUser);
 
         call.enqueue(new Callback<UserResponse>() {
@@ -82,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
                     UserResponse userResponse = response.body();
                     if (userResponse.isSuccess()) {
                         Toast.makeText(RegisterActivity.this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
-                        finish(); // Volta para a tela anterior
+                        finish(); // Voltar para a tela anterior
                     } else {
                         Toast.makeText(RegisterActivity.this, "Erro: " + userResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }

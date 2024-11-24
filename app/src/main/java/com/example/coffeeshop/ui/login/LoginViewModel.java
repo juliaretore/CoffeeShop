@@ -11,13 +11,14 @@ import com.example.coffeeshop.data.LoginRepository;
 import com.example.coffeeshop.data.Result;
 import com.example.coffeeshop.data.model.LoggedInUser;
 import com.example.coffeeshop.R;
+
 public class LoginViewModel extends ViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
 
-    // Construtor que recebe o repositório
+
     LoginViewModel(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
     }
@@ -31,15 +32,35 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login(String username, String password) {
-        // Adicionar log para depuração
+        // Log para verificar o início do processo de login
         System.out.println("LoginViewModel: Chamando login para username: " + username);
 
         loginRepository.login(username, password, new LoginDataSource.ResultCallback<LoggedInUser>() {
             @Override
             public void onSuccess(Result<LoggedInUser> result) {
                 LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-                System.out.println("LoginViewModel: Login bem-sucedido para " + data.getDisplayName());
-                loginResult.postValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+
+                // Log para verificar os dados recebidos do repositório
+                System.out.println("LoginViewModel: Dados recebidos do LoginRepository:");
+                System.out.println("ID: " + data.getUserId());
+                System.out.println("Nome: " + data.getName());
+                System.out.println("Username: " + data.getUsername());
+                System.out.println("Email: " + data.getEmail());
+                System.out.println("Address: " + data.getAddress());
+                System.out.println("Phone: " + data.getPhone());
+
+                // Atualizar o LiveData com o resultado do login
+                loginResult.postValue(new LoginResult(
+                        new LoggedInUserView(
+                                data.getUserId(),
+                                data.getName(),
+                                data.getUsername(),
+                                data.getEmail(),
+                                data.getAddress(),
+                                data.getPhone(),
+                                data.getOrders()
+                        )
+                ));
             }
 
             @Override
