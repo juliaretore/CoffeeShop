@@ -1,4 +1,5 @@
 # Fire Drink Delivery
+## alunas: Julia Llorente, Julia Retore e Nicole Mendes ##
 ## Descrição ##
 O Fire Drink Delivery é um aplicativo de delivery de bebidas desenvolvido para dispositivos móveis Android. O objetivo do projeto é proporcionar uma plataforma simples e eficiente para os usuários realizarem pedidos de bebidas, com funcionalidades como criação de conta, login, visualização do menu, adição de itens ao carrinho, finalização de compras, visualização de compras anteriores e gerenciamento do perfil do usuário.
 
