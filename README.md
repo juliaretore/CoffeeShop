@@ -30,7 +30,7 @@ git clone https://github.com/juliaretore/FireDrinkDelivery.git
 Certifique-se de ter o Java instalado em sua máquina (versão 8 ou superior). Abra o projeto no Android Studio. Conecte um dispositivo Android ou utilize um emulador. Compile e execute o aplicativo no Android Studio.
 
 O banco de dados MongoDB está hospedado na plataforma Render.
-A conexão entre o back-end e o MongoDB é configurada automaticamente nas variáveis de ambiente do back-end. Caso queira rodar localmente, basta ter mongo db instalado, com executar o comando:
+A conexão entre o back-end e o MongoDB é configurada automaticamente nas variáveis de ambiente do back-end. Caso queira rodar localmente, basta ter mongo db instalado, e executar o comando:
 
 ```
  cd server
